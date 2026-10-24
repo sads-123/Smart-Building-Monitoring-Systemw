@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipment Status - Smart Tower</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-text">
+          <span class="brand-title">Smart Tower</span>
+          <span class="brand-subtitle">Smart Building</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main Menu</div>
+      <a href="dashboard.html" class="nav-item">
+        <span>Dashboard</span>
+      </a>
+      <a href="digital-twin.html" class="nav-item">
+        <span>Virtual 3D Building</span>
+      </a>
+      <a href="energy.html" class="nav-item">
+        <span>Electricity & Power</span>
+      </a>
+      <a href="equipment.html" class="nav-item active">
+        <span>Equipment Status</span>
+      </a>
+
+      <div class="nav-section-title">AI & Energy Intelligence</div>
+      <a href="predictions.html" class="nav-item">
+        <span>AI Energy Predictions</span>
+      </a>
+      <a href="tips.html" class="nav-item">
+        <span>AI Electricity Tips</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-snippet">
+        <div class="user-avatar" id="nav-user-avatar">JS</div>
+        <div class="user-info">
+          <div class="user-name" id="nav-user-name">Jordan Smith</div>
+          <div class="user-role-badge" id="nav-user-role">BUILDING MANAGER</div>
+        </div>
+        <a href="#" id="nav-logout-btn" title="Sign Out" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-decoration: none;">
+          Sign Out
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-content">
+    <header class="top-header">
+      <div class="header-left">
+        <button class="menu-toggle">Menu</button>
+        <div class="page-title-box">
+          <h1>Machine & Equipment Health</h1>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- KPI Summary Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Total Monitored Machines</span>
+          </div>
+          <div class="stat-value">8 <small>Assets</small></div>
+          <div class="stat-footer">
+            <span style="color: var(--status-normal); font-weight: 600;">HVAC, Elevators, CRAC, Generators</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Average Health Score</span>
+          </div>
+          <div class="stat-value">84% <small>Good</small></div>
+          <div class="stat-footer"></div>
+        </div>
+
+        <div class="stat-card warning">
+          <div class="stat-header">
+            <span class="stat-label">Maintenance Due</span>
+          </div>
+          <div class="stat-value" style="color: var(--status-warning);">2 <small>Units</small></div>
+          <div class="stat-footer">
+            <span style="color: var(--status-warning); font-weight: 600;">Secondary Chiller & Freight Lift</span>
+            <span style="color: var(--text-muted);">Floor 2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Equipment Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              Building Machinery Inventory
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Machine Name</th>
+                <th>Type</th>
+                <th>Floor</th>
+                <th>Run Hours</th>
+                <th>Operating Temp</th>
+                <th>Health Score</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="equipment-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Data Store & Navigation JS -->
+<script src="js/data-store.js"></script>
+<script src="js/navigation.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    renderEquipmentTable();
+    window.addEventListener('smartbuilding:update', () => {
+      renderEquipmentTable();
+    });
+  });
+
+  function renderEquipmentTable() {
+    const store = window.SmartBuildingStore;
+    if (!store || !store.state) return;
+    const tbody = document.getElementById('equipment-tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = store.state.equipment.map(e => {
+      const isMaint = e.status.includes('Maintenance') || e.riskPercent > 50;
+      // Plain text without box
+      let statusBadge = '<span style="font-weight: 600; color: var(--status-normal);">Normal</span>';
+      if (isMaint) statusBadge = '<span style="font-weight: 600; color: var(--status-warning);">Needs Service</span>';
+
+      return `
+        <tr>
+          <td>
+            <strong>${e.name}</strong>
+          </td>
+          <td>${e.category}</td>
+          <td>Floor ${e.floor}</td>
+          <td>${e.runHours.toLocaleString()} h</td>
+          <td><strong style="color: ${e.tempC > 75 ? 'var(--status-critical)' : 'inherit'};">${e.tempC.toFixed(1)}°C</strong></td>
+          <td>
+            <strong style="color: ${e.health >= 80 ? 'var(--status-normal)' : 'var(--status-warning)'};">${e.health}%</strong>
+          </td>
+          <td>${statusBadge}</td>
+          <td>
+            ${isMaint ? `
+              <button class="btn btn-secondary btn-sm" onclick="serviceEquipment('${e.id}')">
+                Service
+              </button>
+            ` : `
+              <span style="font-size: 0.8rem; color: var(--status-normal); font-weight: 600;">OK</span>
+            `}
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function serviceEquipment(id) {
+    const store = window.SmartBuildingStore;
+    const item = store.state.equipment.find(e => e.id === id);
+    if (item) {
+      item.status = "Normal";
+      item.health = 95;
+      item.riskPercent = 12;
+      item.tempC = item.tempC - 15;
+      store.saveState();
+      renderEquipmentTable();
+      alert(`Asset ${item.name} serviced and recalibrated successfully.`);
+    }
+  }
+</script>
+
+</body>
+</html>

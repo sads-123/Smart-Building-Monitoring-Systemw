@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Energy Predictions - Smart Tower</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-text">
+          <span class="brand-title">Smart Tower</span>
+          <span class="brand-subtitle">Smart Building</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main Menu</div>
+      <a href="dashboard.html" class="nav-item">
+        <span>Dashboard</span>
+      </a>
+      <a href="digital-twin.html" class="nav-item">
+        <span>Virtual 3D Building</span>
+      </a>
+      <a href="energy.html" class="nav-item">
+        <span>Electricity & Power</span>
+      </a>
+      <a href="equipment.html" class="nav-item">
+        <span>Equipment Status</span>
+      </a>
+
+      <div class="nav-section-title">AI & Energy Intelligence</div>
+      <a href="predictions.html" class="nav-item active">
+        <span>AI Energy Predictions</span>
+      </a>
+      <a href="tips.html" class="nav-item">
+        <span>AI Electricity Tips</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-snippet">
+        <div class="user-avatar" id="nav-user-avatar">JS</div>
+        <div class="user-info">
+          <div class="user-name" id="nav-user-name">Jordan Smith</div>
+          <div class="user-role-badge" id="nav-user-role">BUILDING MANAGER</div>
+        </div>
+        <a href="#" id="nav-logout-btn" title="Sign Out" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-decoration: none;">
+          Sign Out
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-content">
+    <header class="top-header">
+      <div class="header-left">
+        <button class="menu-toggle">Menu</button>
+        <div class="page-title-box">
+          <h1>AI Energy Predictions</h1>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- Main Prediction Form (Interactive Calculator) -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              Future Electricity Consumption Predictor
+            </div>
+          </div>
+        </div>
+
+        <form onsubmit="runEnergyPrediction(event)">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+            
+            <div class="form-group">
+              <label class="form-label">Expected People in Building</label>
+              <input type="number" id="pred-occ" class="form-input" value="380" min="0" max="600" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Expected Temperature (°C)</label>
+              <input type="number" step="0.1" id="pred-temp" class="form-input" value="25.5" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Air Conditioning (AC) Level (%)</label>
+              <input type="number" id="pred-hvac" class="form-input" value="75" min="0" max="100" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Lights Turned On (%)</label>
+              <input type="number" id="pred-light" class="form-input" value="65" min="0" max="100" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Daily Working Hours</label>
+              <input type="number" id="pred-hours" class="form-input" value="9" min="1" max="24" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Past Power Baseline (kW)</label>
+              <input type="number" id="pred-hist" class="form-input" value="230" required>
+            </div>
+
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="margin-top: 1rem; width: 100%; padding: 0.85rem; font-size: 1rem; cursor: pointer;">
+            Predict Future Energy Consumption
+          </button>
+        </form>
+
+        <!-- Prediction Result Display -->
+        <div id="prediction-result-box" style="margin-top: 1.5rem; padding: 1.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem;">
+            Prediction Results
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+            <div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Estimated Power Draw</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="res-predicted-kw">268.4 kW</div>
+            </div>
+
+            <div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Estimated Daily Electricity</div>
+              <div style="font-size: 2rem; font-weight: 800; color: #0284c7;" id="res-daily-kwh">4,155.6 kWh</div>
+            </div>
+
+            <div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Estimated Daily Electricity Cost</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--status-normal);" id="res-daily-cost">₹35,323</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Data Store & Navigation JS -->
+<script src="js/data-store.js"></script>
+<script src="js/navigation.js"></script>
+
+<script>
+  async function runEnergyPrediction(event) {
+    event.preventDefault();
+
+    const occ = parseFloat(document.getElementById('pred-occ').value);
+    const temp = parseFloat(document.getElementById('pred-temp').value);
+    const hvac = parseFloat(document.getElementById('pred-hvac').value);
+    const light = parseFloat(document.getElementById('pred-light').value);
+    const hours = parseInt(document.getElementById('pred-hours').value);
+    const hist = parseFloat(document.getElementById('pred-hist').value);
+
+    try {
+      const res = await fetch('/api/predict/energy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          occupancy: occ,
+          temp: temp,
+          hvac: hvac,
+          light: light,
+          hours: hours,
+          hist: hist
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        document.getElementById('res-predicted-kw').textContent = `${data.predicted_kw.toFixed(1)} kW`;
+        document.getElementById('res-daily-kwh').textContent = `${data.estimated_daily_kwh.toLocaleString()} kWh`;
+        document.getElementById('res-daily-cost').textContent = `₹${Math.round(data.predicted_cost).toLocaleString('en-IN')}`;
+        return;
+      }
+    } catch (err) {
+      console.warn("API request fallback:", err);
+    }
+
+    // Mathematical formula emulation (Rate in INR: ₹8.50 / unit)
+    const baseKW = 75.0;
+    const occKW = (occ / 600.0) * 85.0;
+    const tempDelta = Math.max(0, temp - 21.0);
+    const hvacKW = (hvac / 100.0) * (55.0 + tempDelta * 7.5);
+    const lightKW = (light / 100.0) * 38.0;
+    const histKW = (hist * 0.15);
+
+    const totalKW = +(baseKW + occKW + hvacKW + lightKW + histKW).toFixed(1);
+    const dailyKWh = +((totalKW * hours) + (75.0 * 0.4 * (24 - hours))).toFixed(1);
+    const cost = Math.round(dailyKWh * 8.50);
+
+    document.getElementById('res-predicted-kw').textContent = `${totalKW} kW`;
+    document.getElementById('res-daily-kwh').textContent = `${dailyKWh.toLocaleString()} kWh`;
+    document.getElementById('res-daily-cost').textContent = `₹${cost.toLocaleString('en-IN')}`;
+  }
+</script>
+
+</body>
+</html>

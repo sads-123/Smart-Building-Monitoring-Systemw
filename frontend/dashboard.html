@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Smart Tower</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-text">
+          <span class="brand-title">Smart Tower</span>
+          <span class="brand-subtitle">Smart Building</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main Menu</div>
+      <a href="dashboard.html" class="nav-item active">
+        <span>Dashboard</span>
+      </a>
+      <a href="digital-twin.html" class="nav-item">
+        <span>Virtual 3D Building</span>
+      </a>
+      <a href="energy.html" class="nav-item">
+        <span>Electricity & Power</span>
+      </a>
+      <a href="equipment.html" class="nav-item">
+        <span>Equipment Status</span>
+      </a>
+
+      <div class="nav-section-title">AI & Energy Intelligence</div>
+      <a href="predictions.html" class="nav-item">
+        <span>AI Energy Predictions</span>
+      </a>
+      <a href="tips.html" class="nav-item">
+        <span>AI Electricity Tips</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-snippet">
+        <div class="user-avatar" id="nav-user-avatar">JS</div>
+        <div class="user-info">
+          <div class="user-name" id="nav-user-name">Jordan Smith</div>
+          <div class="user-role-badge" id="nav-user-role">BUILDING MANAGER</div>
+        </div>
+        <a href="#" id="nav-logout-btn" title="Sign Out" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-decoration: none;">
+          Sign Out
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-content">
+    
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="menu-toggle" aria-label="Toggle Navigation">
+          Menu
+        </button>
+        <div class="page-title-box">
+          <h1>Building Overview</h1>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Body -->
+    <div class="page-body">
+
+      <!-- ==================== 8 KPI METRIC CARDS ==================== -->
+      <div class="stats-grid">
+
+        <!-- 1. Total Energy -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Current Electricity Draw</span>
+          </div>
+          <div class="stat-value" id="kpi-total-energy">248.5 <small>kW</small></div>
+        </div>
+
+        <!-- 2. Occupancy -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">People in Building</span>
+          </div>
+          <div class="stat-value" id="kpi-occupancy">342 <small>/ 600 max</small></div>
+        </div>
+
+        <!-- 3. Avg Temperature -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Average Temperature</span>
+          </div>
+          <div class="stat-value" id="kpi-avg-temp">22.4 <small>°C</small></div>
+        </div>
+
+        <!-- 4. Energy Cost -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Today's Electricity Cost</span>
+          </div>
+          <div class="stat-value" id="kpi-energy-cost">₹32,642</div>
+        </div>
+
+        <!-- 5. Equipment Condition -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Equipment Condition</span>
+          </div>
+          <div class="stat-value" id="kpi-equip-health">84% <small>Avg</small></div>
+        </div>
+
+        <!-- 6. Active Warnings -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Active Warnings</span>
+          </div>
+          <div class="stat-value" id="kpi-alerts-count" style="color: var(--status-critical);">3 <small>Active</small></div>
+        </div>
+
+        <!-- 7. Building Health Score -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Building Health Score</span>
+          </div>
+          <div class="stat-value" id="kpi-health-score" style="color: var(--status-normal);">89 <small>/ 100</small></div>
+        </div>
+
+        <!-- 8. AI Energy Forecast -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">AI Energy Forecast</span>
+          </div>
+          <div class="stat-value" id="kpi-ai-prediction" style="color: var(--accent-blue);">268.4 <small>kW</small></div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- Data Store & Navigation JS -->
+<script src="js/data-store.js"></script>
+<script src="js/navigation.js"></script>
+<!-- Dashboard Specific JS -->
+<script src="js/dashboard.js"></script>
+</body>
+</html>

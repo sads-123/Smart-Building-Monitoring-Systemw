@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electricity & Power - Smart Tower</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-text">
+          <span class="brand-title">Smart Tower</span>
+          <span class="brand-subtitle">Smart Building</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main Menu</div>
+      <a href="dashboard.html" class="nav-item">
+        <span>Dashboard</span>
+      </a>
+      <a href="digital-twin.html" class="nav-item">
+        <span>Virtual 3D Building</span>
+      </a>
+      <a href="energy.html" class="nav-item active">
+        <span>Electricity & Power</span>
+      </a>
+      <a href="equipment.html" class="nav-item">
+        <span>Equipment Status</span>
+      </a>
+
+      <div class="nav-section-title">AI & Energy Intelligence</div>
+      <a href="predictions.html" class="nav-item">
+        <span>AI Energy Predictions</span>
+      </a>
+      <a href="tips.html" class="nav-item">
+        <span>AI Electricity Tips</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-snippet">
+        <div class="user-avatar" id="nav-user-avatar">JS</div>
+        <div class="user-info">
+          <div class="user-name" id="nav-user-name">Jordan Smith</div>
+          <div class="user-role-badge" id="nav-user-role">BUILDING MANAGER</div>
+        </div>
+        <a href="#" id="nav-logout-btn" title="Sign Out" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-decoration: none;">
+          Sign Out
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-content">
+    <header class="top-header">
+      <div class="header-left">
+        <button class="menu-toggle">Menu</button>
+        <div class="page-title-box">
+          <h1>Electricity & Power Usage</h1>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- Energy KPI Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Current Power Draw</span>
+          </div>
+          <div class="stat-value" id="energy-curr-kw">248.5 <small>kW</small></div>
+          <div class="stat-footer">
+            <span style="color: var(--text-muted);">Status: Stable</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Today's Electricity Used</span>
+          </div>
+          <div class="stat-value" id="energy-daily-kwh">3,840 <small>kWh</small></div>
+          <div class="stat-footer">
+            <span style="color: var(--text-muted);">Est. End: 4,920 kWh</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">This Week's Total</span>
+          </div>
+          <div class="stat-value">26,450 <small>kWh</small></div>
+          <div class="stat-footer">
+            <span style="color: var(--text-muted);">Past 7 days</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">This Month's Total</span>
+          </div>
+          <div class="stat-value">114,800 <small>kWh</small></div>
+          <div class="stat-footer">
+            <span style="color: var(--text-muted);">This month</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Estimated Today's Bill</span>
+          </div>
+          <div class="stat-value" id="energy-cost-display">₹32,642 <small>today</small></div>
+          <div class="stat-footer">
+            <span style="color: var(--text-muted);">₹9,75,000 month est.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zone Power Submeter Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              Room Electricity Details
+            </div>
+            <div class="card-subtitle">Active electrical readings for each monitored room</div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Room Name</th>
+                <th>Floor</th>
+                <th>Current Power (kW)</th>
+                <th>Today's Usage</th>
+                <th>Estimated Daily Bill</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="energy-submeters-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Data Store & Navigation JS -->
+<script src="js/data-store.js"></script>
+<script src="js/navigation.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    renderEnergyData();
+
+    window.addEventListener('smartbuilding:update', () => {
+      renderEnergyData();
+    });
+  });
+
+  function renderEnergyData() {
+    const store = window.SmartBuildingStore;
+    if (!store || !store.state) return;
+    const state = store.state;
+
+    const currKwEl = document.getElementById('energy-curr-kw');
+    const dailyKwhEl = document.getElementById('energy-daily-kwh');
+    const costDisplayEl = document.getElementById('energy-cost-display');
+
+    if (currKwEl) currKwEl.innerHTML = `${state.metrics.totalEnergyKW.toFixed(1)} <small>kW</small>`;
+    if (dailyKwhEl) dailyKwhEl.innerHTML = `${state.metrics.energyAccumulatedKWh.toLocaleString()} <small>kWh</small>`;
+    if (costDisplayEl) costDisplayEl.innerHTML = `₹${Math.round(state.metrics.estimatedDailyCost).toLocaleString('en-IN')} <small>today</small>`;
+
+    // Render Submeters Table
+    const tbody = document.getElementById('energy-submeters-tbody');
+    if (!tbody) return;
+
+    let rows = [];
+    state.floors.forEach(floor => {
+      floor.rooms.forEach(room => {
+        const estDayKwh = (room.powerKW * 15.5).toFixed(1);
+        const estRoomCost = Math.round(estDayKwh * state.meta.baseEnergyRatePerKwh);
+        
+        // Plain text without box
+        let statusTag = '<span style="font-weight: 600; color: var(--status-normal);">Normal</span>';
+        if (room.status === 'yellow') statusTag = '<span style="font-weight: 600; color: var(--status-warning);">High</span>';
+        if (room.status === 'red') statusTag = '<span style="font-weight: 600; color: var(--status-critical);">Critical</span>';
+
+        rows.push(`
+          <tr>
+            <td><strong>${room.name}</strong> <span style="font-size: 0.75rem; color: var(--text-muted);">(Zone ${room.id})</span></td>
+            <td>${floor.name.split(' - ')[0]}</td>
+            <td><strong style="color: var(--accent-blue);">${room.powerKW.toFixed(1)} kW</strong></td>
+            <td>${estDayKwh} kWh</td>
+            <td>₹${estRoomCost.toLocaleString('en-IN')}</td>
+            <td>${statusTag}</td>
+          </tr>
+        `);
+      });
+    });
+
+    tbody.innerHTML = rows.join('');
+  }
+</script>
+
+</body>
+</html>

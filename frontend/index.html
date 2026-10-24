@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Smart Tower</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-wrapper">
+
+  <div class="auth-card" style="max-width: 400px; margin: 3rem auto; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+    <div class="auth-brand" style="text-align: center; margin-bottom: 1.5rem;">
+      <h2 style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.25rem;">Smart Tower</h2>
+      <p style="font-size: 0.85rem; color: var(--accent-blue); font-weight: 600; text-transform: uppercase;">
+        Building Manager Portal
+      </p>
+    </div>
+
+    <!-- Alert / Status message container -->
+    <div id="auth-alert" style="display: none; padding: 0.65rem 0.9rem; border-radius: 6px; margin-bottom: 1.25rem; font-size: 0.82rem; font-weight: 500;"></div>
+
+    <!-- Manager Login Form -->
+    <form id="login-form" onsubmit="handleAuthSubmit(event)">
+      <div class="form-group" style="margin-bottom: 1.15rem;">
+        <label class="form-label" for="login-username" style="display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.85rem;">Username or Email</label>
+        <input type="text" id="login-username" class="form-input" placeholder="manager" value="manager" required autocomplete="username" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 0.9rem;">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" for="login-password" style="display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.85rem;">Password</label>
+        <input type="password" id="login-password" class="form-input" placeholder="••••••••" value="manager123" required autocomplete="current-password" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 0.9rem;">
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; border-radius: var(--radius-sm);">
+        Sign In
+      </button>
+    </form>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data-store.js"></script>
+  <script>
+    function showFeedback(msg, type = 'info') {
+      const alertBox = document.getElementById('auth-alert');
+      alertBox.style.display = 'block';
+      alertBox.textContent = msg;
+
+      if (type === 'error') {
+        alertBox.style.background = 'rgba(239, 68, 68, 0.1)';
+        alertBox.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+        alertBox.style.color = '#dc2626';
+      } else if (type === 'success') {
+        alertBox.style.background = 'rgba(22, 163, 74, 0.1)';
+        alertBox.style.border = '1px solid rgba(22, 163, 74, 0.3)';
+        alertBox.style.color = '#16a34a';
+      } else {
+        alertBox.style.background = 'rgba(37, 99, 235, 0.1)';
+        alertBox.style.border = '1px solid rgba(37, 99, 235, 0.3)';
+        alertBox.style.color = '#2563eb';
+      }
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+      const role = 'Building Manager';
+
+      // Try API if Flask is running
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, role })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.token || data.user) {
+            window.SmartBuildingStore.setAuth(data.user);
+            showFeedback("Login successful! Redirecting to Dashboard...", 'success');
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 400);
+            return;
+          }
+        }
+      } catch (err) {
+        // Backend offline fallback
+      }
+
+      // Local simulation fallback
+      window.SmartBuildingStore.login(username, password, role);
+      showFeedback("Login successful! Redirecting to Dashboard...", 'success');
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 400);
+    }
+  </script>
+</body>
+</html>

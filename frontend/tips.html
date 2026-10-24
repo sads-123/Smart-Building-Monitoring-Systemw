@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Electricity Tips - Smart Tower</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .tip-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-text">
+          <span class="brand-title">Smart Tower</span>
+          <span class="brand-subtitle">Smart Building</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main Menu</div>
+      <a href="dashboard.html" class="nav-item">
+        <span>Dashboard</span>
+      </a>
+      <a href="digital-twin.html" class="nav-item">
+        <span>Virtual 3D Building</span>
+      </a>
+      <a href="energy.html" class="nav-item">
+        <span>Electricity & Power</span>
+      </a>
+      <a href="equipment.html" class="nav-item">
+        <span>Equipment Status</span>
+      </a>
+
+      <div class="nav-section-title">AI & Energy Intelligence</div>
+      <a href="predictions.html" class="nav-item">
+        <span>AI Energy Predictions</span>
+      </a>
+      <a href="tips.html" class="nav-item active">
+        <span>AI Electricity Tips</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-snippet">
+        <div class="user-avatar" id="nav-user-avatar">JS</div>
+        <div class="user-info">
+          <div class="user-name" id="nav-user-name">Jordan Smith</div>
+          <div class="user-role-badge" id="nav-user-role">BUILDING MANAGER</div>
+        </div>
+        <a href="#" id="nav-logout-btn" title="Sign Out" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-decoration: none;">
+          Sign Out
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-content">
+    <header class="top-header">
+      <div class="header-left">
+        <button class="menu-toggle">Menu</button>
+        <div class="page-title-box">
+          <h1>Simple Ways to Save Electricity</h1>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- Category Filter -->
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+        <button class="btn btn-secondary btn-sm active-tab" onclick="filterTips('ALL', this)">All Tips</button>
+        <button class="btn btn-secondary btn-sm" onclick="filterTips('AC', this)">Air Conditioning (AC)</button>
+        <button class="btn btn-secondary btn-sm" onclick="filterTips('Lights', this)">Lighting</button>
+        <button class="btn btn-secondary btn-sm" onclick="filterTips('Machines', this)">Machinery</button>
+      </div>
+
+      <!-- List of Clean Tips Points -->
+      <div id="tips-container" style="display: flex; flex-direction: column; gap: 1rem;">
+        
+        <!-- Tip 1 -->
+        <div class="tip-card" data-category="AC">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+            1. Keep AC at 24°C Instead of 21°C in Quiet Rooms
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            Floor 3 has fewer people. Setting the air conditioner temperature slightly warmer (around 24°C) keeps the room comfortable and saves a large amount of electricity.
+          </p>
+        </div>
+
+        <!-- Tip 2 -->
+        <div class="tip-card" data-category="Lights">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+            2. Use Window Sunlight Instead of Lights During Day
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            Between 10:00 AM and 3:00 PM, bright daylight comes in from big windows. Dimming or turning off the lights right next to windows saves easy electricity.
+          </p>
+        </div>
+
+        <!-- Tip 3 -->
+        <div class="tip-card" data-category="Machines">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+            3. Don't Turn on Big AC Chillers at the Same Minute
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            When turning on large cooling chillers in the morning, wait 15 minutes between each machine. Starting both at once causes a big power surge that drives up electricity bills.
+          </p>
+        </div>
+
+        <!-- Tip 4 -->
+        <div class="tip-card" data-category="AC">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+            4. Keep Server Room Doors Closed Tight
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            Server Room 203 gets warm easily. Keeping the doors closed keeps cold air inside the room, so the cooling fans do not have to run at maximum speed all day.
+          </p>
+        </div>
+
+        <!-- Tip 5 -->
+        <div class="tip-card" data-category="AC">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+            5. Cool the Building Early in the Morning
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            Turn on AC slightly earlier around 6:00 AM when electricity is cheap and outside air is cool. By the hot afternoon (1:00 PM – 4:00 PM), the building is already cool, so the AC can rest.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Data Store & Navigation JS -->
+<script src="js/data-store.js"></script>
+<script src="js/navigation.js"></script>
+
+<script>
+  function filterTips(category, btn) {
+    document.querySelectorAll('.page-body .btn-secondary').forEach(b => b.classList.remove('active-tab'));
+    if (btn) btn.classList.add('active-tab');
+
+    const cards = document.querySelectorAll('.tip-card');
+    cards.forEach(card => {
+      if (category === 'ALL' || card.getAttribute('data-category') === category) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
